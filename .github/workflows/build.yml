@@ -9,8 +9,8 @@ on:
   workflow_dispatch:
 
 env:
-  IMAGE_STAGING: "ghcr.io/${{ fromJSON('"' + github.repository_owner + '"').toLowerCase() }}/timescaledb-postgis-pgvector-testing"
-  IMAGE_RELEASE: "ghcr.io/${{ fromJSON('"' + github.repository_owner + '"').toLowerCase() }}/timescaledb-postgis-pgvector"
+  IMAGE_STAGING: "ghcr.io/${{ github.repository_owner }}/timescaledb-postgis-pgvector-testing"
+  IMAGE_RELEASE: "ghcr.io/${{ github.repository_owner }}/timescaledb-postgis-pgvector"
 
 jobs:
   generate-jobs:
