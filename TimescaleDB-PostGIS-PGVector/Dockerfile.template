@@ -51,7 +51,8 @@ RUN set -xe; \
 	. $HOME/.cargo/env; \
 	git clone https://github.com/timescale/pgvectorscale.git /tmp/pgvectorscale; \
 	cd /tmp/pgvectorscale/pgvectorscale; \
-	$HOME/.cargo/bin/cargo install --locked cargo-pgrx --version $(cargo metadata --format-version 1 | jq -r '.packages[] | select(.name == "pgrx") | .version'); \
+	PGRX_VERSION=$(cargo metadata --format-version 1 | jq -r '.packages[] | select(.name == "pgrx") | .version'); \
+	$HOME/.cargo/bin/cargo install --locked cargo-pgrx --version $PGRX_VERSION; \
 	$HOME/.cargo/bin/cargo pgrx init --pg${PG_MAJOR} pg_config; \
 	$HOME/.cargo/bin/cargo pgrx install --release; \
 	cd /; \
