@@ -17,13 +17,13 @@
 FROM postgis/postgis:%%POSTGIS_IMAGE_VERSION%%
 
 # Do not split the description, otherwise we will see a blank space in the labels
-LABEL name="PostgreSQL + TimescaleDB + PostGIS Container Images" \
+LABEL name="PostgreSQL + TimescaleDB + PostGIS + PGVector Container Images" \
     version="${PG_VERSION}" \
     release="%%IMAGE_RELEASE_VERSION%%" \
-    summary="PostgreSQL + TimescaleDB + PostGIS Container images." \
-    description="This Docker image contains PostgreSQL, TimescaleDB, PostGIS and Barman Cloud based on Postgres %%POSTGIS_IMAGE_VERSION%%."
+    summary="PostgreSQL + TimescaleDB + PostGIS + PGVector Container images." \
+    description="This Docker image contains PostgreSQL, TimescaleDB, PostGIS, pgvector(scale) and Barman Cloud based on Postgres %%POSTGIS_IMAGE_VERSION%%."
 
-LABEL org.opencontainers.image.description="This Docker image contains PostgreSQL, PostGIS, TimescaleDB and Barman Cloud based on Postgres %%POSTGIS_IMAGE_VERSION%%."
+LABEL org.opencontainers.image.description="This Docker image contains PostgreSQL, PostGIS, TimescaleDB, pgvector(scale) and Barman Cloud based on Postgres %%POSTGIS_IMAGE_VERSION%%."
 
 COPY requirements.txt /
 

@@ -14,16 +14,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-FROM postgis/postgis:14-3.5
+FROM postgis/postgis:16-3.5
 
 # Do not split the description, otherwise we will see a blank space in the labels
-LABEL name="PostgreSQL + TimescaleDB + PostGIS Container Images" \
+LABEL name="PostgreSQL + TimescaleDB + PostGIS + PGVector Container Images" \
 	version="${PG_VERSION}" \
-	release="76" \
-	summary="PostgreSQL + TimescaleDB + PostGIS Container images." \
-	description="This Docker image contains PostgreSQL, TimescaleDB, PostGIS and Barman Cloud based on Postgres 14-3.5."
+	release="77" \
+	summary="PostgreSQL + TimescaleDB + PostGIS + PGVector Container images." \
+	description="This Docker image contains PostgreSQL, TimescaleDB, PostGIS, PGVector and Barman Cloud based on Postgres 16-3.5."
 
-LABEL org.opencontainers.image.description="This Docker image contains PostgreSQL, PostGIS, TimescaleDB and Barman Cloud based on Postgres 14-3.5."
+LABEL org.opencontainers.image.description="This Docker image contains PostgreSQL, PostGIS, PGVector, TimescaleDB and Barman Cloud based on Postgres 16-3.5."
 
 COPY requirements.txt /
 
@@ -61,6 +61,14 @@ RUN set -xe; \
 	pip3 install --upgrade pip; \
 	# TODO: Remove --no-deps once https://github.com/pypa/pip/issues/9644 is solved
 	pip3 install --no-deps -r requirements.txt; \
+	rm -rf /var/lib/apt/lists/*;
+
+# Install pgvector
+RUN set -xe; \
+	apt-get update; \
+	apt-get install -y --no-install-recommends \
+	postgresql-16-pgvector \
+	; \
 	rm -rf /var/lib/apt/lists/*;
 
 # Change the uid of postgres to 26

@@ -14,16 +14,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-FROM postgis/postgis:13-3.5
+FROM postgis/postgis:%%POSTGIS_IMAGE_VERSION%%
 
 # Do not split the description, otherwise we will see a blank space in the labels
-LABEL name="PostgreSQL + TimescaleDB + PostGIS Container Images" \
+LABEL name="PostgreSQL + TimescaleDB + PostGIS + PGVector + PGVectorScale Container Images" \
 	version="${PG_VERSION}" \
-	release="77" \
-	summary="PostgreSQL + TimescaleDB + PostGIS Container images." \
-	description="This Docker image contains PostgreSQL, TimescaleDB, PostGIS and Barman Cloud based on Postgres 13-3.5."
+	release="%%IMAGE_RELEASE_VERSION%%" \
+	summary="PostgreSQL + TimescaleDB + PostGIS + PGVector + PGVectorScale Container images." \
+	description="This Docker image contains PostgreSQL, TimescaleDB, PostGIS, PGVector, PGVectorScale and Barman Cloud based on Postgres %%POSTGIS_IMAGE_VERSION%%."
 
-LABEL org.opencontainers.image.description="This Docker image contains PostgreSQL, PostGIS, TimescaleDB and Barman Cloud based on Postgres 13-3.5."
+LABEL org.opencontainers.image.description="This Docker image contains PostgreSQL, PostGIS, PGVector, PGVectorScale, TimescaleDB and Barman Cloud based on Postgres %%POSTGIS_IMAGE_VERSION%%."
 
 COPY requirements.txt /
 
@@ -33,7 +33,7 @@ RUN apt-get update \
 	&& echo "deb https://packagecloud.io/timescale/timescaledb/debian/ $(lsb_release -c -s) main" | tee /etc/apt/sources.list.d/timescaledb.list \
 	&& wget --quiet -O - https://packagecloud.io/timescale/timescaledb/gpgkey | apt-key add - \
 	&& apt-get update \
-	&& apt-get install -y "timescaledb-2-postgresql-${PG_MAJOR}" "timescaledb-toolkit-postgresql-${PG_MAJOR}" \
+	&& apt-get install -y "timescaledb-2-postgresql-${PG_MAJOR}" "timescaledb-toolkit-postgresql-${PG_MAJOR}" "pgvectorscale-postgresql-${PG_MAJOR}" \
 	&& apt-get remove -y lsb-release wget \
 	&& 	rm -fr /tmp/* \
 	&& 	rm -rf /var/lib/apt/lists/*
@@ -61,6 +61,14 @@ RUN set -xe; \
 	pip3 install --upgrade pip; \
 	# TODO: Remove --no-deps once https://github.com/pypa/pip/issues/9644 is solved
 	pip3 install --no-deps -r requirements.txt; \
+	rm -rf /var/lib/apt/lists/*;
+
+# Install pgvector
+RUN set -xe; \
+	apt-get update; \
+	apt-get install -y --no-install-recommends \
+	postgresql-${PG_MAJOR}-pgvector \
+	; \
 	rm -rf /var/lib/apt/lists/*;
 
 # Change the uid of postgres to 26

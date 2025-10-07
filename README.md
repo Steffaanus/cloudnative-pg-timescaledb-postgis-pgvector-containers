@@ -1,8 +1,8 @@
 # cloudnative-pg-timescaledb-postgis-containers
 
-Operand images for CloudNativePG containing PostgreSQL with TimescaleDB and PostGIS
+Operand images for CloudNativePG containing PostgreSQL with TimescaleDB, PostGIS, PGVector and PGVectorScale
 
-Immutable Application Containers for all available PostgreSQL versions (12 to 17) + TimescaleDB + PostGIS to be used as operands 
+Immutable Application Containers for all available PostgreSQL versions (12 to 17) + TimescaleDB + PostGIS + PGVector + PGVectorScale to be used as operands
 with the [CloudNativePG operator](https://cloudnative-pg.io) for Kubernetes.
 
 These images are built on top of the [PostGIS image](https://hub.docker.com/r/postgis/postgis)
@@ -11,6 +11,8 @@ These images are built on top of the [PostGIS image](https://hub.docker.com/r/po
 - TimescaleDB
 - Barman Cloud
 - PGAudit
+- PGVector
+- PGVectorScale
 
 > **Note:** Platform support (amd64/arm64) is automatically detected for each PostgreSQL version by querying Docker Hub's API. If a specific version doesn't support arm64 architecture, the build process will automatically fall back to amd64-only builds. This ensures that images are built for all supported architectures without manual configuration.
 
@@ -21,7 +23,7 @@ PGAudit is distributed under the
 [PostgreSQL License](https://github.com/pgaudit/pgaudit/blob/master/LICENSE).
 
 Images are available via the
-[GitHub Container Registry](https://github.com/imusmanmalik/cloudnative-pg-timescaledb-postgis-containers/pkgs/container/timescaledb-postgis).
+[GitHub Container Registry](https://github.com/Steffaanus/cloudnative-pg-timescaledb-postgis-pgvector-containers/pkgs/container/timescaledb-postgis-pgvector).
 
 ## How to use them
 
@@ -31,7 +33,7 @@ accordingly. Please look at the registry for a list of available images
 and select the one you need.
 
 Create a YAML manifest. For example, you can put the YAML below into a file
-named `timescaledb-postgis.yaml` (any name is fine). (Please refer to
+named `timescaledb-postgis-pgvector.yaml` (any name is fine). (Please refer to
 [CloudNativePG](https://cloudnative-pg.io/docs) for details on the API):
 
 ```yaml
@@ -41,7 +43,7 @@ metadata:
   name: cluster-example
 spec:
   instances: 1
-  imageName: ghcr.io/imusmanmalik/timescaledb-postgis:14-3.3
+  imageName: ghcr.io/Steffaanus/timescaledb-postgis-pgvector:16-3.3
   bootstrap:
     initdb:
       postInitTemplateSQL:
@@ -50,6 +52,8 @@ spec:
         - CREATE EXTENSION postgis_topology;
         - CREATE EXTENSION fuzzystrmatch;
         - CREATE EXTENSION postgis_tiger_geocoder;
+        - CREATE EXTENSION pgvector;
+        - CREATE EXTENSION pgvectorscale;
   postgresql:
     shared_preload_libraries:
       - timescaledb
@@ -57,7 +61,7 @@ spec:
     size: 1Gi
 ```
 
-Then run `kubectl apply -f timescaledb-postgis.yaml`.
+Then run `kubectl apply -f timescaledb-postgis-pgvector.yaml`.
 
 When the cluster is up, run the following command to verify the version of
 PostGIS that is available in the system, by connecting to the `app` database:
@@ -107,16 +111,18 @@ CloudNativePG.
 
 ```console
 app=# \dx
-                                           List of installed extensions
-          Name          | Version |   Schema   |                            Description
-------------------------+---------+------------+-------------------------------------------------------------------
- fuzzystrmatch          | 1.1     | public     | determine similarities and distance between strings
- plpgsql                | 1.0     | pg_catalog | PL/pgSQL procedural language
- postgis                | 3.3.2   | public     | PostGIS geometry and geography spatial types and functions
- postgis_tiger_geocoder | 3.3.2   | tiger      | PostGIS tiger geocoder and reverse geocoder
- postgis_topology       | 3.3.2   | topology   | PostGIS topology spatial types and functions
- timescaledb            | 2.10.0  | public     | Enables scalable inserts and complex queries for time-series data
-(6 rows)
+                                            List of installed extensions
+           Name          | Version |   Schema   |                            Description
+ ------------------------+---------+------------+-------------------------------------------------------------------
+  fuzzystrmatch          | 1.1     | public     | determine similarities and distance between strings
+  pgvector               | 0.7.0   | public     | vector similarity search
+  pgvectorscale          | 0.5.0   | public     | pgvectorscale
+  plpgsql                | 1.0     | pg_catalog | PL/pgSQL procedural language
+  postgis                | 3.3.2   | public     | PostGIS geometry and geography spatial types and functions
+  postgis_tiger_geocoder | 3.3.2   | tiger      | PostGIS tiger geocoder and reverse geocoder
+  postgis_topology       | 3.3.2   | topology   | PostGIS topology spatial types and functions
+  timescaledb            | 2.10.0  | public     | Enables scalable inserts and complex queries for time-series data
+(8 rows)
 ```
 
 You can now enjoy TimescaleDB and PostGIS!

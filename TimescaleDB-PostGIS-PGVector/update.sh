@@ -80,6 +80,18 @@ get_latest_barman_version() {
 	echo "$latest_barman_version"
 }
 
+# Get the latest PGVector version
+get_latest_pgvector_version() {
+	local version="$1"
+	apt-cache policy "postgresql-${version}-pgvector" 2>/dev/null | grep 'Candidate:' | awk '{print $2}' || echo "unknown"
+}
+
+# Get the latest PGVectorScale version
+get_latest_pgvectorscale_version() {
+	local version="$1"
+	apt-cache policy "pgvectorscale-postgresql-${version}" 2>/dev/null | grep 'Candidate:' | awk '{print $2}' || echo "unknown"
+}
+
 # record_version(versionFile, component, componentVersion)
 # Parameters:
 #   versionFile: the file containing the version of each component
@@ -124,11 +136,16 @@ generate_postgres() {
 		exit 1
 	fi
 
+	pgvectorVersion=$(get_latest_pgvector_version "${version}")
+	pgvectorscaleVersion=$(get_latest_pgvectorscale_version "${version}")
+
 	if [ -f "${versionFile}" ]; then
 		oldImageReleaseVersion=$(jq -r '.IMAGE_RELEASE_VERSION' "${versionFile}")
 		oldBarmanVersion=$(jq -r '.BARMAN_VERSION' "${versionFile}")
 		oldPostgisImageLastUpdate=$(jq -r '.POSTGIS_IMAGE_LAST_UPDATED' "${versionFile}")
 		oldPostgisImageVersion=$(jq -r '.POSTGIS_IMAGE_VERSION' "${versionFile}")
+		oldPgvectorVersion=$(jq -r '.PGVECTOR_VERSION // "unknown"' "${versionFile}")
+		oldPgvectorscaleVersion=$(jq -r '.PGVECTORSCALE_VERSION // "unknown"' "${versionFile}")
 		imageReleaseVersion=$oldImageReleaseVersion
 	else
 		imageReleaseVersion=1
@@ -137,6 +154,8 @@ generate_postgres() {
 		record_version "${versionFile}" "BARMAN_VERSION" "${barmanVersion}"
 		record_version "${versionFile}" "POSTGIS_IMAGE_LAST_UPDATED" "${postgisImageLastUpdate}"
 		record_version "${versionFile}" "POSTGIS_IMAGE_VERSION" "${postgisImageVersion}"
+		record_version "${versionFile}" "PGVECTOR_VERSION" "${pgvectorVersion}"
+		record_version "${versionFile}" "PGVECTORSCALE_VERSION" "${pgvectorscaleVersion}"
 		return
 	fi
 
@@ -154,6 +173,20 @@ generate_postgres() {
 		echo "Barman changed from $oldBarmanVersion to $barmanVersion"
 		newRelease="true"
 		record_version "${versionFile}" "BARMAN_VERSION" "${barmanVersion}"
+	fi
+
+	# Detect an update of PGVector
+	if [ "$oldPgvectorVersion" != "$pgvectorVersion" ]; then
+		echo "PGVector changed from $oldPgvectorVersion to $pgvectorVersion"
+		newRelease="true"
+		record_version "${versionFile}" "PGVECTOR_VERSION" "${pgvectorVersion}"
+	fi
+
+	# Detect an update of PGVectorScale
+	if [ "$oldPgvectorscaleVersion" != "$pgvectorscaleVersion" ]; then
+		echo "PGVectorScale changed from $oldPgvectorscaleVersion to $pgvectorscaleVersion"
+		newRelease="true"
+		record_version "${versionFile}" "PGVECTORSCALE_VERSION" "${pgvectorscaleVersion}"
 	fi
 
 	if [ "$oldPostgisImageVersion" != "$postgisImageVersion" ]; then
