@@ -5,7 +5,7 @@ Operand images for CloudNativePG containing PostgreSQL with TimescaleDB, PostGIS
 This repo has been Forked from https://github.com/imusmanmalik/cloudnative-pg-timescaledb-postgis-containers and extended with the pgvector and pgvectorscale from timescale.
 
 
-Immutable Application Containers for all available PostgreSQL versions (12 to 17) + TimescaleDB + PostGIS + PGVector + PGVectorScale to be used as operands
+Immutable Application Containers for all available PostgreSQL versions (16 to 17) + TimescaleDB + PostGIS + PGVector + PGVectorScale to be used as operands
 with the [CloudNativePG operator](https://cloudnative-pg.io) for Kubernetes.
 
 These images are built on top of the [PostGIS image](https://hub.docker.com/r/postgis/postgis)
@@ -30,7 +30,7 @@ Images are available via the
 
 ## How to use them
 
-The following example shows how you can easily create a new PostgreSQL 14
+The following example shows how you can easily create a new PostgreSQL 16
 cluster with TimescaleDB 2.10 and PostGIS 3.3 in it. All you have to do is set the `imageName`
 accordingly. Please look at the registry for a list of available images
 and select the one you need.
