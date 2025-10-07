@@ -17,13 +17,13 @@
 FROM postgis/postgis:16-3.5
 
 # Do not split the description, otherwise we will see a blank space in the labels
-LABEL name="PostgreSQL + TimescaleDB + PostGIS + PGVector Container Images" \
+LABEL name="PostgreSQL + TimescaleDB + PostGIS + PGVector + PGVectorScale Container Images" \
 	version="${PG_VERSION}" \
-	release="77" \
-	summary="PostgreSQL + TimescaleDB + PostGIS + PGVector Container images." \
-	description="This Docker image contains PostgreSQL, TimescaleDB, PostGIS, PGVector and Barman Cloud based on Postgres 16-3.5."
+	release="78" \
+	summary="PostgreSQL + TimescaleDB + PostGIS + PGVector + PGVectorScale Container images." \
+	description="This Docker image contains PostgreSQL, TimescaleDB, PostGIS, PGVector, PGVectorScale and Barman Cloud based on Postgres 16-3.5."
 
-LABEL org.opencontainers.image.description="This Docker image contains PostgreSQL, PostGIS, PGVector, TimescaleDB and Barman Cloud based on Postgres 16-3.5."
+LABEL org.opencontainers.image.description="This Docker image contains PostgreSQL, PostGIS, PGVector, PGVectorScale, TimescaleDB and Barman Cloud based on Postgres 16-3.5."
 
 COPY requirements.txt /
 
@@ -33,7 +33,7 @@ RUN apt-get update \
 	&& echo "deb https://packagecloud.io/timescale/timescaledb/debian/ $(lsb_release -c -s) main" | tee /etc/apt/sources.list.d/timescaledb.list \
 	&& wget --quiet -O - https://packagecloud.io/timescale/timescaledb/gpgkey | apt-key add - \
 	&& apt-get update \
-	&& apt-get install -y "timescaledb-2-postgresql-${PG_MAJOR}" "timescaledb-toolkit-postgresql-${PG_MAJOR}" \
+	&& apt-get install -y "timescaledb-2-postgresql-${PG_MAJOR}" "timescaledb-toolkit-postgresql-${PG_MAJOR}" "pgvectorscale-postgresql-${PG_MAJOR}" \
 	&& apt-get remove -y lsb-release wget \
 	&& 	rm -fr /tmp/* \
 	&& 	rm -rf /var/lib/apt/lists/*
@@ -67,7 +67,7 @@ RUN set -xe; \
 RUN set -xe; \
 	apt-get update; \
 	apt-get install -y --no-install-recommends \
-	postgresql-16-pgvector \
+	postgresql-${PG_MAJOR}-pgvector \
 	; \
 	rm -rf /var/lib/apt/lists/*;
 
