@@ -1,10 +1,10 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: ClusterImageCatalog
 metadata:
-  name: timescaledb-postgis
+  name: timescaledb-postgis-pgvector
 spec:
   images:
     - major: 16
-      image: ghcr.io/steffaanus/timescaledb-postgis-pgvector:16-3.5-77@sha256:a068a5abc9dc50aac21299df9c7b0b53c37f6278ff2fa8885639d319e6d2dc5b
+      image: ghcr.io/steffaanus/timescaledb-postgis-pgvector:16-3.5-78@sha256:07189f19a1ae9294d7bcbbe996b3b57db3a0808cb482e7bbc4e91762e6d19075
     - major: 17
-      image: ghcr.io/steffaanus/timescaledb-postgis-pgvector:17-3.5-77@sha256:70467b8242add58269d576381de9d200030d63d5949fc729d824bab1293fe79c
+      image: ghcr.io/steffaanus/timescaledb-postgis-pgvector:17-3.5-78@sha256:a5d90d79c0b7f01a61b090bca47e953ff879e38fa974535190c909fc673c77c8
