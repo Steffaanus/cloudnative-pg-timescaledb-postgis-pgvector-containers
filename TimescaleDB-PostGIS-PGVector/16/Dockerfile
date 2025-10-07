@@ -48,8 +48,8 @@ RUN set -xe; \
 		postgresql-server-dev-${PG_MAJOR} \
 	; \
 	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y; \
-	export PATH="$HOME/.cargo/bin:$PATH"; \
-	git clone --branch v0.5.0 https://github.com/timescale/pgvectorscale.git /tmp/pgvectorscale; \
+	. $HOME/.cargo/env; \
+	git clone https://github.com/timescale/pgvectorscale.git /tmp/pgvectorscale; \
 	cd /tmp/pgvectorscale/pgvectorscale; \
 	$HOME/.cargo/bin/cargo install --locked cargo-pgrx --version $(cargo metadata --format-version 1 | jq -r '.packages[] | select(.name == "pgrx") | .version'); \
 	$HOME/.cargo/bin/cargo pgrx init --pg${PG_MAJOR} pg_config; \
