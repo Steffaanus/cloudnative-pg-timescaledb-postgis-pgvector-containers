@@ -33,10 +33,32 @@ RUN apt-get update \
 	&& echo "deb https://packagecloud.io/timescale/timescaledb/debian/ $(lsb_release -c -s) main" | tee /etc/apt/sources.list.d/timescaledb.list \
 	&& wget --quiet -O - https://packagecloud.io/timescale/timescaledb/gpgkey | apt-key add - \
 	&& apt-get update \
-	&& apt-get install -y "timescaledb-2-postgresql-${PG_MAJOR}" "timescaledb-toolkit-postgresql-${PG_MAJOR}" "pgvectorscale-postgresql-${PG_MAJOR}" \
+	&& apt-get install -y "timescaledb-2-postgresql-${PG_MAJOR}" "timescaledb-toolkit-postgresql-${PG_MAJOR}" \
 	&& apt-get remove -y lsb-release wget \
 	&& 	rm -fr /tmp/* \
 	&& 	rm -rf /var/lib/apt/lists/*
+
+# Install pgvectorscale from source using Rust (supports PostgreSQL 16 and 17)
+RUN set -xe; \
+	apt-get update; \
+	apt-get install -y --no-install-recommends \
+		build-essential \
+		curl \
+		git \
+		postgresql-server-dev-${PG_MAJOR} \
+	; \
+	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y; \
+	export PATH="$HOME/.cargo/bin:$PATH"; \
+	git clone --branch v0.5.0 https://github.com/timescale/pgvectorscale.git /tmp/pgvectorscale; \
+	cd /tmp/pgvectorscale/pgvectorscale; \
+	$HOME/.cargo/bin/cargo install --locked cargo-pgrx --version $(cargo metadata --format-version 1 | jq -r '.packages[] | select(.name == "pgrx") | .version'); \
+	$HOME/.cargo/bin/cargo pgrx init --pg${PG_MAJOR} pg_config; \
+	$HOME/.cargo/bin/cargo pgrx install --release; \
+	cd /; \
+	rm -rf /tmp/pgvectorscale; \
+	apt-get remove -y build-essential curl git postgresql-server-dev-${PG_MAJOR}; \
+	apt-get autoremove -y; \
+	rm -rf /var/lib/apt/lists/*;
 
 # Install pgaudit
 RUN set -xe; \
