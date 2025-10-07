@@ -193,8 +193,8 @@ jobs:
         uses: EndBug/add-and-commit@v9
         if: ${{ github.ref == 'refs/heads/main' }}
         with:
-          author_name: Steffaanus
-          author_email: Steffaanus@gmail.com
+          author_name: steffaanus
+          author_email: steffaanus@gmail.com
           message: 'chore: ClusterImageCatalog update'
           add: 'TimescaleDB-PostGIS-PGVector/ClusterImageCatalog.yaml'
 

@@ -50,7 +50,7 @@ jobs:
           enforce_admins: false
       - uses: EndBug/add-and-commit@v9
         with:
-          author_name: Steffaanus
+          author_name: steffaanus
           author_email: steffaanus@gmail.com
           message: 'chore: Daily Update'
       - name: Enable "include administrators" branch protection

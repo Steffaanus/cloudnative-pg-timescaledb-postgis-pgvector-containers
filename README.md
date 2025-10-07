@@ -23,7 +23,7 @@ PGAudit is distributed under the
 [PostgreSQL License](https://github.com/pgaudit/pgaudit/blob/master/LICENSE).
 
 Images are available via the
-[GitHub Container Registry](https://github.com/Steffaanus/cloudnative-pg-timescaledb-postgis-pgvector-containers/pkgs/container/timescaledb-postgis-pgvector).
+[GitHub Container Registry](https://github.com/steffaanus/cloudnative-pg-timescaledb-postgis-pgvector-containers/pkgs/container/timescaledb-postgis-pgvector).
 
 ## How to use them
 
@@ -43,7 +43,7 @@ metadata:
   name: cluster-example
 spec:
   instances: 1
-  imageName: ghcr.io/Steffaanus/timescaledb-postgis-pgvector:16-3.3
+  imageName: ghcr.io/steffaanus/timescaledb-postgis-pgvector:16-3.3
   bootstrap:
     initdb:
       postInitTemplateSQL:
