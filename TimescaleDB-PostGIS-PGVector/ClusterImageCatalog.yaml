@@ -7,4 +7,4 @@ spec:
     - major: 16
       image: ghcr.io/steffaanus/timescaledb-postgis-pgvector:16-3.5-80@sha256:6c4373de052ab39188d6313afb8b7ba8356635cea0b97125702bdcdf9a7f1237
     - major: 17
-      image: ghcr.io/steffaanus/timescaledb-postgis-pgvector:17-3.5-79@sha256:fd1eadf3f67392733f7c59d9a5ead316e1a05016f76e0ce812ca956a436245d8
+      image: ghcr.io/steffaanus/timescaledb-postgis-pgvector:17-3.5-80@sha256:926ec611e011db50a8820c24e5739815a8c047d09c9ae229de27e7ade3cef214
