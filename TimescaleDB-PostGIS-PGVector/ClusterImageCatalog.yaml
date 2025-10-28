@@ -5,6 +5,6 @@ metadata:
 spec:
   images:
     - major: 16
-      image: ghcr.io/steffaanus/timescaledb-postgis-pgvector:16-3.5-83@sha256:80a4d982851ed4a0d40867905824069079b4cd689721a41c58a036245e9207c3
+      image: ghcr.io/steffaanus/timescaledb-postgis-pgvector:16-3.5-84@sha256:3a440d09b7d401c90bdd6631b11c03464c89334d9888f5a3c6f32b09095366d7
     - major: 17
-      image: ghcr.io/steffaanus/timescaledb-postgis-pgvector:17-3.5-83@sha256:2ddaf4108b3aa3f831672ace11bd315dcadf7236e2d3f495fade1ab579601903
+      image: ghcr.io/steffaanus/timescaledb-postgis-pgvector:17-3.5-84@sha256:1659e898cc38ead145880eb6e7bbba0349871722cfd9a68f58c39d893b08cc02
